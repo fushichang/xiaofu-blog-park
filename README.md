@@ -75,6 +75,10 @@ server {
 
 **源码地址：**[GITHUB](https://github.com/fushichang/xiaofu-blog-park.git)
 
+**源码地址：**[GITEE](https://gitee.com/fushichang/xiaofu-blog-park.git)
+
+
+
 
 ## 参考
 
