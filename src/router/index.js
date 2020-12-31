@@ -1,37 +1,68 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import store from '../store'
+import Layout from '../layout/index.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     redirect: '/index'
   },
   {
     path: '/index',
     name: 'index',
-    component: Home,
+    component: Layout,
+    children: [{
+        path: '/index',
+        name: 'index',
+        component: () => import( /* webpackChunkName: "login" */ '../views/home/index.vue')
+      },
+      {
+        path: '/introduction',
+        name: 'introduction',
+        component: () => import( /* webpackChunkName: "login" */ '../views/introduction/index.vue')
+      },
+      {
+        path: '/concat',
+        name: 'concat',
+        component: () => import( /* webpackChunkName: "login" */ '../views/concat/index.vue')
+      },
+      {
+        path: '/blog',
+        name: 'blog',
+        component: () => import( /* webpackChunkName: "login" */ '../views/blog/index.vue')
+      },
+    ]
+  },
+  {
+    path: '/admin',
+    name: 'Home',
+    component: () => import( /* webpackChunkName: "login" */ '../views/admin/Home.vue'),
     meta: {
       requiresAuth: true
     }
   },
+
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+    component: () => import( /* webpackChunkName: "login" */ '../views/Login.vue')
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
+    component: () => import( /* webpackChunkName: "register" */ '../views/Register.vue')
   },
   {
     path: '/edit',
     name: 'edit',
-    component: () => import(/* webpackChunkName: "edit" */ '../views/Edit.vue')
+    component: () => import( /* webpackChunkName: "edit" */ '../views/Edit.vue')
+  },
+  {
+    path: '/add',
+    name: 'add',
+    component: () => import( /* webpackChunkName: "edit" */ '../views/article/add.vue')
   }
 ]
 
@@ -59,7 +90,9 @@ router.beforeEach((to, from, next) => {
     } else {
       next({
         path: '/login',
-        query: { redirect: to.fullPath } // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
+        query: {
+          redirect: to.fullPath
+        } // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
       })
     }
   } else {

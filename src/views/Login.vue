@@ -12,7 +12,11 @@
             :rules="loginRules"
           >
             <el-form-item prop="user_id">
-              <el-input v-model="loginForm.user_id" placeholder="用户名" prefix-icon="el-icon-user"></el-input>
+              <el-input
+                v-model="loginForm.user_id"
+                placeholder="用户名"
+                prefix-icon="el-icon-user"
+              ></el-input>
             </el-form-item>
             <el-form-item prop="user_pwd">
               <el-input
@@ -30,7 +34,12 @@
                 class="code_input"
               ></el-input>
               <div class="code">
-                <img :src="img_base64" alt="code" title="点击切换验证码" @click="changeCode" />
+                <img
+                  :src="img_base64"
+                  alt="code"
+                  title="点击切换验证码"
+                  @click="changeCode"
+                />
               </div>
             </el-form-item>
             <el-button
@@ -38,7 +47,8 @@
               class="w100"
               @click="login('loginForm')"
               :loading="loginStatus"
-            >登 录</el-button>
+              >登 录</el-button
+            >
             <p class="toRegister">
               <el-link type="info" @click="goRegister">没有账号,去注册</el-link>
             </p>
@@ -57,7 +67,7 @@ import commonFooter from './Footer'
 export default {
   name: 'login',
   components: {
-    commonFooter
+    commonFooter,
   },
   data() {
     return {
@@ -65,7 +75,7 @@ export default {
         user_id: '',
         user_pwd: '',
         code: '',
-        code_token: ''
+        code_token: '',
       },
       loginStatus: false,
       loginRules: {
@@ -73,15 +83,15 @@ export default {
         user_pwd: [{ required: true, message: '请输入密码', trigger: 'blur' }],
         code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
-          { len: 4, message: '请输入4位有效验证码', trigger: 'blur' }
-        ]
+          { len: 4, message: '请输入4位有效验证码', trigger: 'blur' },
+        ],
       },
-      img_base64: ''
+      img_base64: '',
     }
   },
   created() {
     var _self = this
-    document.onkeydown = function(e) {
+    document.onkeydown = function (e) {
       var key = window.event.keyCode
       if (key === 13 || key === 100) {
         _self.login('loginForm')
@@ -103,11 +113,11 @@ export default {
     },
     goRegister() {
       this.$router.push({
-        path: '/register'
+        path: '/register',
       })
     },
     login(formName) {
-      this.$refs[formName].validate(async valid => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let _self = this
           // 防止误操多点
@@ -122,10 +132,10 @@ export default {
               _id: data._id,
               token: data.token,
               avatar: data.avatar,
-              user_name: data.user_name
+              user_name: data.user_name,
             })
             this.$router.push({
-              path: '/'
+              path: '/admin',
             })
           } else {
             this.$message({
@@ -135,7 +145,7 @@ export default {
                 _self.getCode()
                 _self.loginStatus = false
                 _self.loginForm.code = ''
-              }
+              },
             })
           }
         } else {
@@ -143,8 +153,8 @@ export default {
           return false
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -19,6 +19,11 @@
           >
         </div>
         <div class="login-out">
+          <el-button @click="addArticle" type="danger" plain size="mini"
+            >退出</el-button
+          >
+        </div>
+        <div class="login-out">
           <el-button @click="loginOut" type="danger" plain size="mini"
             >退出</el-button
           >
@@ -152,8 +157,8 @@
 </template>
 
 <script>
-import HttpRecord from '../api/record'
-import UserHttp from '../api/user'
+import HttpRecord from '../../api/record'
+import UserHttp from '../../api/user'
 export default {
   name: 'home',
   components: {},
@@ -309,6 +314,11 @@ export default {
     loginOut() {
       this.$store.commit('remove')
       this.$router.push('/login')
+    },
+    addArticle() {
+      this.$router.push({
+        path: '/add',
+      })
     },
     async getRecord() {
       this.loading = true
