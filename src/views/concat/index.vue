@@ -1,5 +1,5 @@
 <template>
-  <div>concat</div>
+  <div>concat1</div>
 </template>
 
 <script>

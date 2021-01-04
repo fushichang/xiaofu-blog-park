@@ -57,12 +57,33 @@ const routes = [{
   {
     path: '/edit',
     name: 'edit',
+    meta: {
+      requiresAuth: true
+    },
     component: () => import( /* webpackChunkName: "edit" */ '../views/Edit.vue')
   },
   {
     path: '/add',
     name: 'add',
-    component: () => import( /* webpackChunkName: "edit" */ '../views/article/add.vue')
+    component: () => import( /* webpackChunkName: "edit" */ '../views/article/add.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/404',
+    component: () => import('../views/error-page/404'),
+    hidden: true
+  },
+  {
+    path: '/401',
+    component: () => import('../views/error-page/401'),
+    hidden: true
+  },
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }
 ]
 
@@ -71,33 +92,40 @@ const router = new VueRouter({
   routes
 })
 
+const whiteList = ['/login', '/register']
+
 router.beforeEach((to, from, next) => {
   let token = store.state.user.token
   // 判断要去的路由有没有requiresAuth
-  if (to.meta.requiresAuth) {
-    if (token) {
-      if (from.query.redirect) {
-        if (to.path === from.query.redirect) {
-          next()
+  if (whiteList.includes(to.path)) {
+    next()
+  } else {
+    if (to.meta.requiresAuth) {
+      if (token) {
+        if (from.query.redirect) {
+          if (to.path === from.query.redirect) {
+            next()
+          } else {
+            next({
+              path: from.query.redirect
+            })
+          }
         } else {
-          next({
-            path: from.query.redirect
-          })
+          next()
         }
       } else {
-        next()
+        next({
+          path: '/login',
+          query: {
+            redirect: to.fullPath
+          } // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
+        })
       }
     } else {
-      next({
-        path: '/login',
-        query: {
-          redirect: to.fullPath
-        } // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
-      })
+      next()
     }
-  } else {
-    next()
   }
+
 })
 
 export default router
